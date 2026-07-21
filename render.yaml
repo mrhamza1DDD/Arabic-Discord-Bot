@@ -1,0 +1,10 @@
+services:
+  - type: background
+    name: arabic-discord-bot
+    env: node
+    plan: free
+    buildCommand: npm ci
+    startCommand: npm start
+    envVars:
+      - key: DISCORD_TOKEN
+      - key: CLIENT_ID

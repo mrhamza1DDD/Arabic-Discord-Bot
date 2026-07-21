@@ -1,0 +1,17 @@
+{
+  "name": "arabic-discord-bot",
+  "version": "1.0.0",
+  "description": "بوت ديسكورد باللغة العربية باستخدام discord.js",
+  "main": "src/index.js",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.11.0",
+    "@discordjs/rest": "^1.5.0",
+    "@discordjs/builders": "^1.5.0",
+    "discord-api-types": "^0.37.33",
+    "dotenv": "^16.3.1"
+  }
+}
