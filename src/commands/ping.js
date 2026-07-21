@@ -6,9 +6,9 @@ module.exports = {
     .setDescription('يختبر استجابة البوت'),
   async execute(interaction) {
     try {
-      await interaction.reply({ content: '🏓 جارى حساب التأخير...', fetchReply: true });
+      await interaction.reply({ content: '🏓 جاري حساب التأخير...', fetchReply: true });
       const latency = Date.now() - interaction.createdTimestamp;
-      await interaction.editReply(`🏓 Pong! التأخير: ${latency}ms`);
+      await interaction.editReply(`🏓 تم الاتصال — التأخير: ${latency} مللي ثانية`);
     } catch (error) {
       console.error('خطأ في أمر ping:', error);
       if (!interaction.replied) await interaction.reply({ content: 'حدث خطأ أثناء تنفيذ أمر ping.', ephemeral: true });
