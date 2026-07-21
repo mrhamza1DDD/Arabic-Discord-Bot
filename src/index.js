@@ -12,6 +12,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 const TOKEN = process.env.DISCORD_TOKEN;
 const CLIENT_ID = process.env.CLIENT_ID;
+const GUILD_ID = process.env.GUILD_ID; // اختياري: لتسجيل الأوامر في جيلد أثناء التطوير
 
 if (!TOKEN || !CLIENT_ID) {
   console.error('الرجاء تعيين المتغيرات البيئية DISCORD_TOKEN و CLIENT_ID');
@@ -33,16 +34,24 @@ for (const file of commandFiles) {
     console.warn(`تخطي الملف غير الصحيح: ${file}`);
     continue;
   }
-  commands.push(command.data.toJSON ? command.data.toJSON() : command.data);
-  client.commands.set(command.data.name || (command.data.toJSON && command.data.toJSON().name), command);
+  const jsonData = typeof command.data.toJSON === 'function' ? command.data.toJSON() : command.data;
+  commands.push(jsonData);
+  const name = jsonData.name || (command.data.name ? command.data.name : null);
+  client.commands.set(name, command);
 }
 
 (async () => {
   try {
     console.log('تسجيل أوامر الشلّاش (Slash Commands) في Discord...');
     const rest = new REST({ version: '10' }).setToken(TOKEN);
-    await rest.put(Routes.applicationCommands(CLIENT_ID), { body: commands });
-    console.log('تم تسجيل الأوامر بنجاح.');
+
+    if (GUILD_ID) {
+      await rest.put(Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID), { body: commands });
+      console.log('تم تسجيل الأوامر في الجيلد (التطوير).');
+    } else {
+      await rest.put(Routes.applicationCommands(CLIENT_ID), { body: commands });
+      console.log('تم تسجيل الأوامر كـ global. قد يستغرق الظهور وقتاً.');
+    }
   } catch (error) {
     console.error('فشل تسجيل الأوامر:', error);
   }
